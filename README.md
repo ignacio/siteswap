@@ -1,14 +1,14 @@
-
 # siteswap #
 
 **Siteswap** is a simple asynchronous test framework for [LuaNode][2], based on [lunit][3].
 
 Siteswap is...
+
 > a notation used to describe juggling patterns..
 
 (taken from [Wikipedia][1]).
 
-And writing tests for asynchronous code is mostly juggling stuff in the air, so...
+Writing tests for asynchronous code is mostly juggling stuff in the air, so...
 
 ## What does it look like? #
 
