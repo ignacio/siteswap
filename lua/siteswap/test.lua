@@ -86,7 +86,7 @@ function Test:Run (callback, env)
 	self.start_time = os.time()
 	self.callback = callback
 
-	local function last(fn)
+	local function last(self, fn)
 		return function (emitter, err, results)
 			if type(fn) == "function" then
 				fn(emitter, err, results)
@@ -168,6 +168,23 @@ end
 
 
 local typenames = { "nil", "boolean", "number", "string", "table", "function", "thread", "userdata" }
+
+-- Type check functions
+
+for _, typename in ipairs(typenames) do
+	Test["is_"..typename] = function(testcase, x)
+		return type(x) == typename
+	end
+end
+
+local is_nil      = is_nil
+local is_boolean  = is_boolean
+local is_number   = is_number
+local is_string   = is_string
+local is_table    = is_table
+local is_function = is_function
+local is_thread   = is_thread
+local is_userdata = is_userdata
 
 local function format_arg(arg)
 	local argtype = type(arg)
