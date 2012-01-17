@@ -9,14 +9,16 @@ local Runner = Class.InheritsFrom(EventEmitter)
 local private = {}
 
 private.TestsDone = function (runner)
-	runner:emit("done")
-	
+	local with_errors = false
 	for _, test in ipairs(runner.m_tests) do
 		
 		if test.failed and #test.failed > 0 then
 			console.error("Test failed: %s\n%s", test.name, luanode.utils.inspect(test.failed))
+			with_errors = true
 		end
 	end
+
+	runner:emit("done", with_errors)
 end
 
 
