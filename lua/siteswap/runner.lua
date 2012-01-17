@@ -42,8 +42,10 @@ function Runner:Run (env)
 	local next_index, test = iterator(self.m_tests, first_index)
 
 	local function run_next()
+		self:emit("after_test", test)
 		next_index, test = iterator(tests, next_index)
 		if test then
+			self:emit("before_test", test)
 			test:Run(run_next, env)
 		else
 			private.TestsDone(self)
@@ -51,6 +53,7 @@ function Runner:Run (env)
 	end
 
 	if next_index then
+		self:emit("before_test", test)
 		test:Run(run_next, env)
 	else
 		private.TestsDone(self)
