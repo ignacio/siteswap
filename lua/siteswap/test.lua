@@ -3,6 +3,9 @@ local EventEmitter = require "luanode.event_emitter"
 
 require "luanode.utils"
 
+local color_green = console.getColor("green")
+local color_lightred = console.getColor("lightred")
+local color_reset = console.getResetColor()
 
 ---
 -- Fake synchronous functions
@@ -30,13 +33,14 @@ end
 
 local Test = Class.InheritsFrom(EventEmitter)
 
-function Test:__init(name, fn, ...)
-	--console.log("new test", name)
+function Test:__init(name, fn, options)
 	
 	local newTest = Class.construct(Test)
 	
 	newTest.name = name
 	newTest.fn = fn
+
+	newTest.log = assert(options.log)
 	
 	return newTest
 end
@@ -81,7 +85,7 @@ end
 --]]
 
 function Test:Run (callback, env)
-	console.info("Will run test %q", self.name)
+	self.log("Will run test '%s'", self.name)
 	
 	self.start_time = os.time()
 	self.callback = callback
@@ -113,14 +117,12 @@ function Test:Done ()
 	
 	if not self.failed then
 		self:emit("ok")
-		console.color("green")
-			console.log("Test %q completed ok. Took %d seconds", self.name, self.end_time - self.start_time)
-		console.reset_color()
+		self.log( color_green .. "Test '%s' completed ok. Took %d seconds" .. color_reset,
+			self.name, self.end_time - self.start_time )
 	else
 		self:emit("failed")
-		console.color("lightred")
-			console.log("Test %q completed with errors. Took %d seconds", self.name, self.end_time - self.start_time)
-		console.reset_color()
+		self.log(color_lightred .. "Test '%s' completed with errors. Took %d seconds" .. color_reset, 
+			self.name, self.end_time - self.start_time)
 	end
 	
 	self:callback()
